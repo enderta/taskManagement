@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
+const port = process.env.PORT || 3000; // Use the PORT environment variable, default to 3000 if it's not set
 
 dotenv.config();
 
@@ -35,7 +36,6 @@ app.use("/api", tasksRoute);
 app.use("/api", projectsRoute);
 
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port http://localhost:${process.env.PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on port http://localhost:${port}`);
 });
-

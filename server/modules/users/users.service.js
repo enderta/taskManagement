@@ -3,101 +3,91 @@ const pool = require("../../db.config");
 const jwt = require("jsonwebtoken");
 const secret = "secret";
 
-
-exports.registerUser = async (userData) => {
-    const {username, password} = userData;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await pool.query("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
-        [username, hashedPassword]);
-    return {
-        status: "success",
-        message: `User ${username} created successfully`,
-        data: user.rows[0],
-    };
-};
-
-exports.loginUser = async (userData) => {
-    const {username, password} = userData;
-    const user = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-    if (user.rows.length === 0) {
-        return {
-            status: "error",
-            message: "User not found",
-        };
-    } else {
-        const match = await bcrypt.compare(password, user.rows[0].password);
-        if (match) {
-            const token = jwt.sign({id: user.rows[0].id}, secret, {expiresIn: "1h"});
-            return {
-                status: "success",
-                message: "User logged in successfully",
-                token: token,
-                user: user.rows[0]
-            };
-        } else {
-            return {
-                status: "error",
-                message: "Incorrect password",
-            };
-        }
-    }
-};
-exports.getUsers = async () => {
+const registerUser = async (username, email, password) => {
     try {
-        const result = await pool.query("SELECT * FROM users");
-        return {
-            status: 'success',
-            message: `Retrieved ${result.rows.length} users`,
-            data: result.rows
-        };
-    } catch(err) {
-        console.error(err);
-        throw new Error("Error while getting users from the database");
+        const password_hash = await bcrypt.hash(password, 10);
+        const response = await pool.query(
+            "insert into users (username, email, password_hash) values ($1, $2, $3) returning *;",
+            [username, email, password_hash]
+        );
+        return response.rows[0];
+    } catch (error) {
+        console.log(error);
     }
-};
-exports.getUserById = async (id) => {
+}
+
+const getUsers = async () => {
     try {
-        const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-        if (result.rows.length === 0) {
-            return {
-                status: "error",
-                message: "User not found",
-            };
-        } else {
-            return {
-                status: "success",
-                message: `Retrieved user with id ${id}`,
-                data: result.rows[0]
-            };
-        }
-    } catch(err) {
-        console.error(err);
-        throw new Error("Error while getting user from the database");
+        const response = await pool.query(
+            "select * from users;"
+        );
+        return response.rows;
+    } catch (error) {
+        console.log(error);
     }
-};
+}
 
-exports.updateUser = async (id, userData) => {
-    const {username, password} = userData;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await pool.query("UPDATE users SET username = $1, password = $2 WHERE id = $3 RETURNING *",
-        [username, hashedPassword, id]);
-    return {
-        status: "success",
-        message: `User ${username} updated successfully`,
-        data: user.rows[0],
-    };
+const getUserById = async (id) => {
+    try {
+        const response = await pool.query(
+            "select * from users where id = $1;",
+            [id]
+        );
+        return response.rows[0];
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-};
+const updateUser = async (username, email, password, id) => {
+    try {
+        const password_hash = await bcrypt.hash(password, 10);
+        const response = await pool.query(
+            "update users set username = $1, email = $2, password_hash = $3 where id = $4;",
+            [username, email, password_hash, id]
+        );
+        return "User updated successfully";
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-exports.deleteUser = async (id) => {
-    const user = await pool.query("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
-    return {
-        status: "success",
-        message: `User ${user.rows[0].username} deleted successfully`,
-        data: user.rows[0],
-    };
-};
+const deleteUser = async (id) => {
+    try {
+        const response = await pool.query(
+            "delete from users where id = $1;",
+            [id]
+        );
+        return "User deleted successfully";
+    } catch (error) {
+        console.log(error);
+    }
+}
 
+const loginUser = async (body) => {
+    try {
+        const {email, password} = body;
+        const response = await pool.query(
+            "select * from users where email = $1;",
+            [email]
+        );
+        const user = response.rows[0];
+        if (user && await bcrypt.compare(password, user.password_hash)) {
+            const token = jwt.sign({id: user.id}, secret);
+            return token;
+        } else {
+            return "Invalid email or password";
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
-
-
+module.exports = {
+    registerUser,
+    getUsers,
+    getUserById,
+    updateUser,
+    deleteUser,
+    loginUser
+}
