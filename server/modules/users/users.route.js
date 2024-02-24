@@ -3,8 +3,13 @@ const router = express.Router();
 const userController = require("./users.controller");
 const verifyToken = require("../../middlewares/verifyToken");
 const cors = require("cors");
+const bodyParser = require("body-parser"); // Add this line
 
-//give cors permission all the routes all origins
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
+
+// Rest of your code...give cors permission all the routes all origins
 const corsOptions = {
     origin: "*",
     optionsSuccessStatus: 200,

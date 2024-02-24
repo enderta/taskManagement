@@ -81,27 +81,30 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const loginUser = async (req, res) => {
-    try {
-        const {email, password} = req.body;
-        const response = await pool.query(
-            "select * from users where email = $1;",
-            [email]
-        );
-        const user = response.rows[0];
-        if (user) {
-            const isPasswordMatch = await bcrypt.compare(password, user.password_hash);
-            if (isPasswordMatch) {
-                const token = jwt.sign({id: user.id, role: user.role}, secret);
-                res.json({token});
-            } else {
-                res.json("Password is incorrect");
-            }
+const loginUser = async (userData) => {
+    const {email, password} = userData;
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (user.rows.length === 0) {
+        return {
+            status: "error",
+            message: "User not found",
+        };
+    } else {
+        const match = await bcrypt.compare(password, user.rows[0].password_hash);
+        if (match) {
+            const token = jwt.sign({id: user.rows[0].id}, secret, {expiresIn: "1h"});
+            return {
+                status: "success",
+                message: "User logged in successfully",
+                token: token,
+                user: user.rows[0]
+            };
         } else {
-            res.json("User not found");
+            return {
+                status: "error",
+                message: "Incorrect password",
+            };
         }
-    } catch (error) {
-        console.log(error);
     }
 }
 
