@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -16,25 +16,17 @@ app.use(cors(
     }
 ));
 
+// Use bodyParser.json() or express.json(), not both
 app.use(bodyParser.json());
 
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
-
+// Your routes go here
 const userRoute = require("./modules/users/users.route");
 const tasksRoute = require("./modules/tasks/tasks.route");
 const projectsRoute = require("./modules/projects/projects.route");
 
-
 app.use("/api", userRoute);
-
 app.use("/api", tasksRoute);
-
 app.use("/api", projectsRoute);
-
 
 app.listen(port, () => {
     console.log(`Server is running on port http://localhost:${port}`);
