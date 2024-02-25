@@ -12,10 +12,11 @@ const registerUser = async (req, res) => {
 
 const getUsers = async (req, res) => {
     try {
-        const response = await userService.getUsers();
-        res.json(response);
+        const users = await userService.getUsers();
+        res.json(users);
     } catch (error) {
-        console.log(error.message || error);
+        console.error(error.message || error);
+        res.status(500).send('Server error');
     }
 }
 

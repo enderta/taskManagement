@@ -5,7 +5,7 @@ import Login from "./Login";
 import Home from "./Home";
 import Tasks from "./Tasks";
 import Projects from "./Projects";
-
+import AdminProjectsCreate from "./AdminProjectsCreate";
 
 function Pages() {
     const isLoggedIn = localStorage.getItem("token");
@@ -14,14 +14,24 @@ function Pages() {
         <div>
             <Routes>
                 {isLoggedIn ? (
-                    <>
-
-                        <Route path={"/*"} element={<Home/>}/>
-                        <Route path="/register" element={<Register/>}/>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path={"/tasks"} element={<Tasks/>}/>
-                        <Route path={"/projects"} element={<Projects/>}/>
-                    </>
+                    localStorage.getItem("role") === "admin" ? (
+                        <>
+                            <Route path={"/*"} element={<Home/>}/>
+                            <Route path="/register" element={<Register/>}/>
+                            <Route path="/login" element={<Login/>}/>
+                            <Route path={"/tasks"} element={<Tasks/>}/>
+                            <Route path={"/projects"} element={<Projects/>}/>
+                            <Route path={"/createProject"} element={<AdminProjectsCreate/>}/>
+                        </>
+                    ) : (
+                        <>
+                            <Route path={"/*"} element={<Home/>}/>
+                            <Route path="/register" element={<Register/>}/>
+                            <Route path="/login" element={<Login/>}/>
+                            <Route path={"/tasks"} element={<Tasks/>}/>
+                            <Route path={"/projects"} element={<Projects/>}/>
+                        </>
+                    )
                 ) : (
                     <>
                         <Route path={"/*"} element={<Home/>}/>

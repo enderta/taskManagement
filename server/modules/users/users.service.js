@@ -29,14 +29,12 @@ const registerUser = async (username, email, password) => {
     }
 }
 
-const getUsers = async (req, res) => {
+const getUsers = async () => {
     try {
-        const response = await pool.query(
-            "select * from users;"
-        );
-        res.json(response.rows);
+        const response = await pool.query("SELECT * FROM users");
+        return response.rows;
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
