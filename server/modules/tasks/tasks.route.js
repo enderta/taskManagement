@@ -1,21 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const verifyToken = require("../../middlewares/verifyToken");
-const cors = require("cors");
-const tasksController = require("./tasks.controller");
+const tasksController = require('./tasks.controller');
 
-//give cors permission all the routes all origins
-const corsOptions = {
-    origin: "*",
-    optionsSuccessStatus: 200,
-};
+router.post('/', tasksController.createTask);
+router.get('/', tasksController.getTasks);
+router.get('/:id', tasksController.getTaskById);
+router.put('/:id', tasksController.updateTask);
+router.delete('/:id', tasksController.deleteTask);
+router.get('/user/:userId', tasksController.getTasksByUserId);
+router.patch('/:id/status', tasksController.updateTaskStatus);
 
-router.use(cors(corsOptions));
-
-router.post("/tasks", verifyToken, tasksController.createTask);
-router.get("/tasks", verifyToken, tasksController.getTasks);
-router.get("/tasks/:id", verifyToken, tasksController.getTaskById);
-router.put("/tasks/:id", verifyToken, tasksController.updateTask);
-router.delete("/tasks/:id", verifyToken, tasksController.deleteTask);
 
 module.exports = router;

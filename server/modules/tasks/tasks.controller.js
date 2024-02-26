@@ -50,11 +50,33 @@ const deleteTask = async (req, res) => {
     }
 }
 
+const getTasksByUserId = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const response = await tasksService.getTasksByUserId(userId);
+        res.json(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const updateTaskStatus = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { status } = req.body;
+        const response = await tasksService.updateTaskStatus(id, status);
+        res.json(response);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     createTask,
     getTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    getTasksByUserId,
+    updateTaskStatus
 }
-
