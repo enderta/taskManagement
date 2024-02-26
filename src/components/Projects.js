@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, CardBody, CardHeader} from "react-bootstrap";
+import {Card, CardBody, CardHeader, Row, Col, Button, CardFooter} from "react-bootstrap";
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -29,7 +29,6 @@ const Projects = () => {
 
     useEffect(() => {
         const fetchProjects = async () => {
-
             const projects = await fetchData(`http://localhost:3000/api/projects/user/${localStorage.getItem('user_id')}`);
             setProjects(projects);
         }
@@ -40,27 +39,31 @@ const Projects = () => {
 
     return (
         <div>
-            <h1>Projects</h1>
-            <Card>
-                <CardBody>
-                    <CardHeader>
-                        {projects.length > 0 ? (
-                            <>
-                                <h1>
-                                    {projects[0].username}'s Projects
-                                </h1>
-                                <h2>
-                                    {projects[0].project_name}
-                                </h2>
-                            </>
-                        ) : (
-                            <h1>
-                                No Projects
-                            </h1>
-                        )}
-                    </CardHeader>
-                </CardBody>
-            </Card>
+            <h1> Projects</h1>
+            <Row>
+                {projects.map(project => (
+                    <Col md={4} key={project.id}>
+                        <Card className="mb-6" bg="dark" text="white" border="dark" style={{height: '300px',margin:"10px"}}>
+                            <CardBody>
+                                <h2>{project.project_name}</h2>
+
+                            </CardBody>
+                            <CardFooter>
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    style={{backgroundColor: 'goldenrod', border: 'none'}}
+                                    onClick={() => {
+                                        window.location = `/tasks`;
+                                    }}
+                                >
+                                    Tasks
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
         </div>
     );
 };
