@@ -29,7 +29,7 @@ function Login() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user_id', data.user.id);
             localStorage.setItem('role',data.user.role)
-           window.location = '/tasks';
+          localStorage.getItem('role') === 'admin' ? window.location = '/createProject' : window.location = '/projects';
         } else {
             alert(data.message);
         }

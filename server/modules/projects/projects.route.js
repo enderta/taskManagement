@@ -17,6 +17,7 @@ router.get("/projects", verifyToken, projectController.getProjects);
 router.get("/projects/:id", verifyToken, projectController.getProjectById);
 router.put("/projects/:id", verifyToken, projectController.updateProject);
 router.delete("/projects/:id", verifyToken, projectController.deleteProject);
+router.get("/projects/user/:user_id", verifyToken, projectController.projectByUserId);
 
 module.exports = router;
 

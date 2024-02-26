@@ -36,7 +36,18 @@ const getProjectById = async (req, res) => {
         console.log(error);
     }
 }
-
+const projectByUserId = async (req, res) => {
+    try {
+        const user_id = req.params.user_id;
+        const response = await pool.query(
+            "SELECT p.*, u.* FROM projects p JOIN users u ON p.user_id = u.id WHERE u.id = $1",
+            [user_id]
+        );
+        res.json(response.rows);
+    } catch (error) {
+        console.log(error);
+    }
+}
 const updateProject = async (req, res) => {
     try {
         const id = req.params.id;
@@ -69,5 +80,6 @@ module.exports = {
     getProjects,
     getProjectById,
     updateProject,
-    deleteProject
+    deleteProject,
+    projectByUserId
 }

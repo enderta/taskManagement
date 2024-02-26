@@ -24,6 +24,14 @@ const getProjectById = async (req, res) => {
     }
 }
 
+const projectByUserId = async (req, res) => {
+    try {
+        await projectService.projectByUserId(req, res);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const updateProject = async (req, res) => {
     try {
         await projectService.updateProject(req, res);
@@ -45,5 +53,6 @@ module.exports = {
     getProjects,
     getProjectById,
     updateProject,
-    deleteProject
+    deleteProject,
+    projectByUserId
 }

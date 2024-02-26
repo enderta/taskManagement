@@ -12,20 +12,31 @@ const Projects = () => {
                 'Authorization': localStorage.getItem('token')
             }
         });
-        return response.json();
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const text = await response.text();
+
+        if (!text) {
+            throw new Error('No data returned from server');
+        }
+
+        const data = JSON.parse(text);
+        return data;
     }
 
     useEffect(() => {
         const fetchProjects = async () => {
-            const projects = await fetchData('http://localhost:3000/api/projects');
-            const projectsWithUsernames = await Promise.all(projects.map(async (project) => {
-                const user = await fetchData(`http://localhost:3000/api/user/${project.user_id}`);
-                return {...project, username: user.username};
-            }));
-            setProjects(projectsWithUsernames);
+
+            const projects = await fetchData(`http://localhost:3000/api/projects/user/${localStorage.getItem('user_id')}`);
+            setProjects(projects);
         }
         fetchProjects().then(r => console.log(r));
     }, []);
+
+    console.log(projects);
 
     return (
         <div>
