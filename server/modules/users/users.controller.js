@@ -1,4 +1,5 @@
 const userService = require('./users.service');
+const {query} = require("../../db.config");
 
 const registerUser = async (req, res) => {
     try {
@@ -19,17 +20,18 @@ const getUsers = async (req, res) => {
         res.status(500).send('Server error');
     }
 }
-
 const getUserById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const response = await userService.getUserById(id);
-        res.json(response);
+        const response = await userService.getUserById(req);
+        if (response.error) {
+            res.status(404).json({ message: response.error });
+        } else {
+            res.json(response);
+        }
     } catch (error) {
         console.log(error.message || error);
     }
 }
-
 const updateUser = async (req, res) => {
     try {
         const id = req.params.id;

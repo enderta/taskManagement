@@ -4,7 +4,7 @@ const createProject = async (req, res) => {
     try {
         const {project_name, user_id} = req.body;
         const response = await pool.query(
-            "insert into projects (project_name, user_id) values ($1, $2, $3) returning *;",
+            "insert into projects (project_name, user_id) values ($1, $2) returning *;",
             [project_name, user_id]
         );
         res.json(response.rows[0]);

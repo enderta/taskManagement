@@ -38,19 +38,22 @@ const getUsers = async () => {
     }
 }
 
-const getUserById = async (req, res) => {
+const getUserById = async (req) => {
     try {
         const id = req.params.id;
         const response = await pool.query(
             "select * from users where id = $1;",
             [id]
         );
-        res.json(response.rows[0]);
+        if (response.rows.length === 0) {
+            return { error: "User not found" };
+        } else {
+            return response.rows[0];
+        }
     } catch (error) {
         console.log(error);
     }
 }
-
 const updateUser = async (req, res) => {
     try {
         const id = req.params.id;

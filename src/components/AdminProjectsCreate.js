@@ -20,7 +20,7 @@ function AdminProjectsCreate(props) {
             const data = await response.json();
             if (Array.isArray(data)) {
                 const projectsWithUsernames = await Promise.all(data.map(async (project) => {
-                    const userResponse = await fetch(`http://localhost:3000/api/users/${project.user_id}`, {
+                    const userResponse = await fetch(`http://localhost:3000/api/user/${project.user_id}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -53,9 +53,25 @@ function AdminProjectsCreate(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Call the function to create the project and assign it to the selected user
-        // createProject(projectName, selectedUser);
-        handleClose();
+        const addProject = async () => {
+            const response = await fetch('http://localhost:3000/api/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                },
+                body: JSON.stringify({
+                    project_name: projectName,
+                    user_id: selectedUser
+                })
+            });
+            const data = await response.json();
+            console.log(data);
+        }
+        addProject().then(r => console.log('Project added'));
+        //reload the page
+        window.location.reload();
+                handleClose();
     }
 
     useEffect(() => {
