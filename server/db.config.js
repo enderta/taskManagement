@@ -10,17 +10,21 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
     ssl: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: false, // Consider removing this in production
     },
 });
 
-pool.connect(function(err) {
-    if (err) {
-        console.error('Error connecting to database:', err);
-    } else {
-        console.log('Connected to database');
-        console.log(process.env.DB_USER)
-    }
+// Handle connection events
+pool.on("connect", () => {
+    console.log("Connected to the database");
+    console.log("Database user:", process.env.DB_USER);
 });
 
-module.exports = pool;
+pool.on("error", (err) => {
+    console.error("Unexpected error on idle client", err);
+    process.exit(-1); // Exit the process on connection errors
+});
+
+module.exports = {
+    query: (text, params) => pool.query(text, params),
+};

@@ -1,77 +1,73 @@
 const pool = require("../../db.config");
 
-const createProject = async (req, res) => {
+const createProject = async (project_name, user_id) => {
     try {
-        const {project_name, user_id} = req.body;
         const response = await pool.query(
-            "insert into projects (project_name, user_id) values ($1, $2) returning *;",
+            "INSERT INTO projects (project_name, user_id) VALUES ($1, $2) RETURNING *;",
             [project_name, user_id]
         );
-        res.json(response.rows[0]);
+        return response.rows[0];
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
-const getProjects = async (req, res) => {
+const getProjects = async () => {
     try {
         const response = await pool.query(
-            "select * from projects;"
+            "SELECT * FROM projects;"
         );
-        res.json(response.rows);
+        return response.rows;
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
-const getProjectById = async (req, res) => {
+const getProjectById = async (id) => {
     try {
-        const id = req.params.id;
         const response = await pool.query(
-            "select * from projects where id = $1;",
+            "SELECT * FROM projects WHERE id = $1;",
             [id]
         );
-        res.json(response.rows[0]);
+        return response.rows[0];
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
-const projectByUserId = async (req, res) => {
+
+const projectByUserId = async (user_id) => {
     try {
-        const user_id = req.params.user_id;
         const response = await pool.query(
             "SELECT p.*, u.* FROM projects p JOIN users u ON p.user_id = u.id WHERE u.id = $1",
             [user_id]
         );
-        res.json(response.rows);
+        return response.rows;
     } catch (error) {
-        console.log(error);
-    }
-}
-const updateProject = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const {project_name, user_id} = req.body;
-        const response = await pool.query(
-            "update projects set project_name = $1, user_id = $2 where id = $3;",
-            [project_name, user_id, id]
-        );
-        res.json("Project updated successfully");
-    } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 
-const deleteProject = async (req, res) => {
+const updateProject = async (id, project_name, user_id) => {
     try {
-        const id = req.params.id;
         const response = await pool.query(
-            "delete from projects where id = $1;",
+            "UPDATE projects SET project_name = $1, user_id = $2 WHERE id = $3;",
+            [project_name, user_id, id]
+        );
+        return "Project updated successfully";
+    } catch (error) {
+        throw error;
+    }
+}
+
+const deleteProject = async (id) => {
+    try {
+        const response = await pool.query(
+            "DELETE FROM projects WHERE id = $1;",
             [id]
         );
-        res.json("Project deleted successfully");
+        return "Project deleted successfully";
     } catch (error) {
-        console.log(error);
+        throw error;
     }
 }
 

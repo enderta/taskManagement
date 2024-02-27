@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Card, CardBody, CardHeader, Row, Col, Button, CardFooter} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import { Card, CardBody, CardFooter, Row, Col, Button } from "react-bootstrap";
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -32,7 +32,7 @@ const Projects = () => {
             const projects = await fetchData(`http://localhost:3000/api/projects/user/${localStorage.getItem('user_id')}`);
             setProjects(projects);
         }
-        fetchProjects().then(r => console.log(r));
+        fetchProjects();
     }, []);
 
     console.log(projects);
@@ -41,18 +41,17 @@ const Projects = () => {
         <div>
             <h1> Projects</h1>
             <Row>
-                {projects.map(project => (
+                {Array.isArray(projects) && projects.map(project => (
                     <Col md={4} key={project.id}>
-                        <Card className="mb-6" bg="dark" text="white" border="dark" style={{height: '300px',margin:"10px"}}>
+                        <Card className="mb-6" bg="dark" text="white" border="dark" style={{ height: '300px', margin: "10px" }}>
                             <CardBody>
                                 <h2>{project.project_name}</h2>
-
                             </CardBody>
                             <CardFooter>
                                 <Button
                                     variant="primary"
                                     type="submit"
-                                    style={{backgroundColor: 'goldenrod', border: 'none'}}
+                                    style={{ backgroundColor: 'goldenrod', border: 'none' }}
                                     onClick={() => {
                                         window.location = `/tasks`;
                                     }}

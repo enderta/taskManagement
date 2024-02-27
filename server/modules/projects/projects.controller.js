@@ -2,49 +2,62 @@ const projectService = require('./projects.service');
 
 const createProject = async (req, res) => {
     try {
-        await projectService.createProject(req, res);
+        const { project_name, user_id } = req.body;
+        const response = await projectService.createProject(project_name, user_id);
+        res.json(response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
 const getProjects = async (req, res) => {
-    try {
-        await projectService.getProjects(req, res);
-    } catch (error) {
-        console.log(error);
-    }
+   const response = await projectService.getProjects();
+    res.json(response);
 }
 
 const getProjectById = async (req, res) => {
     try {
-        await projectService.getProjectById(req, res);
+        const id = req.params.id;
+        const response = await projectService.getProjectById(id);
+        res.json(response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
 const projectByUserId = async (req, res) => {
     try {
-        await projectService.projectByUserId(req, res);
+        const user_id = req.params.user_id;
+        const response = await projectService.projectByUserId(user_id);
+        res.json(response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
 const updateProject = async (req, res) => {
     try {
-        await projectService.updateProject(req, res);
+        const id = req.params.id;
+        const { project_name, user_id } = req.body;
+        const response = await projectService.updateProject(id, project_name, user_id);
+        res.json(response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
 const deleteProject = async (req, res) => {
     try {
-        await projectService.deleteProject(req, res);
+        const id = req.params.id;
+        const response = await projectService.deleteProject(id);
+        res.json(response);
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 }
 
