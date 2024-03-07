@@ -9,5 +9,6 @@ router.delete('/task/:id', tasksController.deleteTask);
 router.get('/tasks/user/:userId', tasksController.getTasksByUserId);
 router.patch('/task/:id/status', tasksController.updateTaskStatus);
 router.get('/task/:id', tasksController.getTaskById);
+router.get('/tasks/project/:projectId/user/:userId', tasksController.getTasksByProjectId);
 
 module.exports = router;

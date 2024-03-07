@@ -35,6 +35,14 @@ class TaskService {
         const response = await query('UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *', [status, id]);
         return response.rows[0];
     }
+
+    async getTasksByProjectId(projectId, userId) {
+        const response = await query('SELECT * FROM tasks WHERE project_id = $1 AND assigned_to_user_id = $2', [projectId, userId]);
+        let tasks=[]
+        response.rows.forEach(task=>{
+            tasks.push(task)
+        })
+    }
 }
 
 module.exports = new TaskService();

@@ -78,6 +78,19 @@ const updateTaskStatus = async (req, res) => {
     }
 }
 
+const getTasksByProjectId = async (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+        const userId = req.params.userId;
+        const response = await tasksService.getTasksByProjectId(projectId, userId);
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+}
+
 module.exports = {
     createTask,
     getTasks,
@@ -85,5 +98,6 @@ module.exports = {
     updateTask,
     deleteTask,
     getTasksByUserId,
-    updateTaskStatus
+    updateTaskStatus,
+    getTasksByProjectId
 }

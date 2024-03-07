@@ -41,7 +41,9 @@ const projectByUserId = async (user_id) => {
             "SELECT p.*, u.* FROM projects p JOIN users u ON p.user_id = u.id WHERE u.id = $1",
             [user_id]
         );
+        console.log(response.rows)
         return response.rows;
+
     } catch (error) {
         throw error;
     }

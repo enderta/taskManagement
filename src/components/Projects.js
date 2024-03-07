@@ -35,7 +35,9 @@ const Projects = () => {
         fetchProjects();
     }, []);
 
-    console.log(projects);
+    useEffect(() => {
+        console.log(projects);
+    }, [projects]);
 
     return (
         <div>
