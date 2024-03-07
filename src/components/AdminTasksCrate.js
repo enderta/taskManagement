@@ -21,7 +21,7 @@ function AdminTasksCrate() {
         });
         const data = await response.json();
 console.log(data);
-        window.location = '/crateTask';
+        window.location = '/createProject';
 
     }
 
