@@ -114,7 +114,18 @@ function AdminProjectsCreate() {
                             <td>{index + 1}</td>
                             <td>{project.project_name}</td>
                             <td>{project.username}</td>
-                            <td><Button variant="danger">Delete</Button></td>
+                            <td>
+                                <Button
+                                    variant="primary"
+                                    onClick={() => {
+                                        localStorage.setItem('selected_user_id', project.user_id);
+                                        localStorage.setItem('selected_project_id', project.id);
+                                        window.location = `/crateTask`;
+                                    }}
+                                >
+                                    Create Task
+                                </Button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>

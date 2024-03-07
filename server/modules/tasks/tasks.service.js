@@ -26,8 +26,8 @@ class TaskService {
         return response.rows[0];
     }
 
-    async getTasksByUserId(userId) {
-        const response = await query('SELECT * FROM tasks WHERE assigned_to_user_id = $1', [userId]);
+    async getTasksByUserId(userId,projectId) {
+        const response = await query('SELECT * FROM tasks WHERE assigned_to_user_id = $1 AND project_id = $2', [userId,projectId]);
         return response.rows;
     }
 
@@ -37,11 +37,8 @@ class TaskService {
     }
 
     async getTasksByProjectId(projectId, userId) {
-        const response = await query('SELECT * FROM tasks WHERE project_id = $1 AND assigned_to_user_id = $2', [projectId, userId]);
-        let tasks=[]
-        response.rows.forEach(task=>{
-            tasks.push(task)
-        })
+        const response = await query('SELECT * FROM tasks WHERE assigned_to_user_id = $1 AND project_id = $2', [userId,projectId]);
+        return response.rows;
     }
 }
 

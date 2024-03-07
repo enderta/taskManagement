@@ -38,7 +38,7 @@ const getProjectById = async (id) => {
 const projectByUserId = async (user_id) => {
     try {
         const response = await pool.query(
-            "SELECT p.*, u.* FROM projects p JOIN users u ON p.user_id = u.id WHERE u.id = $1",
+            "SELECT p.id as project_id,p.project_name, u.* FROM projects p JOIN users u ON p.user_id = u.id WHERE u.id = $1",
             [user_id]
         );
         console.log(response.rows)

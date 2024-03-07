@@ -13,13 +13,18 @@ function UserProjects() {
             }
         });
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);}
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         setProjects(data);
     }
     useEffect(() => {
         fetchData();
     }, []);
+    const onClick = (id) => {
+        localStorage.setItem('project_id', id);
+        window.location = `/tasks`;
+    }
 
     return (
         <div>
@@ -32,7 +37,7 @@ function UserProjects() {
                             </thead>
                             <tbody>
                             {Array.isArray(projects) && projects.map((project, index) => (
-                                <tr key={index} onClick={() => localStorage.setItem('project_id', project.id)}>
+                                <tr key={index} onClick={() => onClick(project.project_id)}>
                                     <td>{project.project_name}</td>
                                 </tr>
                             ))}

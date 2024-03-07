@@ -7,6 +7,7 @@ import Tasks from "./Tasks";
 import Projects from "./Projects";
 import AdminProjectsCreate from "./AdminProjectsCreate";
 import UserProjects from "./UserProjects";
+import AdminTasksCrate from "./AdminTasksCrate";
 
 function Pages() {
     const isLoggedIn = localStorage.getItem("token");
@@ -23,6 +24,7 @@ function Pages() {
                             <Route path={"/tasks"} element={<Tasks/>}/>
                             <Route path={"/projects"} element={<Projects/>}/>
                             <Route path={"/createProject"} element={<AdminProjectsCreate/>}/>
+                            <Route path={"/crateTask"} element={<AdminTasksCrate/>}/>
                         </>
                     ) : (
                         <>
