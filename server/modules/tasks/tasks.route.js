@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const tasksController = require('./tasks.controller');
+const verifyToken = require("../../middlewares/verifyToken");
 
-router.post('/tasks', tasksController.createTask);
-router.get('/tasks', tasksController.getTasks);
-router.put('/task/:id', tasksController.updateTask);
-router.delete('/task/:id', tasksController.deleteTask);
-router.get('/tasks/user/:userId', tasksController.getTasksByUserId);
-router.patch('/task/:id/status', tasksController.updateTaskStatus);
-router.get('/task/:id', tasksController.getTaskById);
-router.get('/tasks/project/:projectId/user/:userId', tasksController.getTasksByProjectId);
+router.post('/tasks', verifyToken,tasksController.createTask);
+router.get('/tasks', verifyToken,tasksController.getTasks);
+router.put('/task/:id',verifyToken ,tasksController.updateTask);
+router.delete('/task/:id',verifyToken ,tasksController.deleteTask);
+router.get('/tasks/user/:userId',verifyToken ,tasksController.getTasksByUserId);
+router.patch('/task/:id/status',verifyToken ,tasksController.updateTaskStatus);
+router.get('/task/:id', verifyToken,tasksController.getTaskById);
+router.get('/tasks/project/:projectId/user/:userId', verifyToken,tasksController.getTasksByProjectId);
 
 module.exports = router;

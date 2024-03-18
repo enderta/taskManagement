@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
-const port = process.env.PORT || 3000; // Use the PORT environment variable, default to 3000 if it's not set
+const port = process.env.PORT || 3000;
 
 dotenv.config();
 

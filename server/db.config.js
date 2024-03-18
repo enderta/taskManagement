@@ -17,7 +17,7 @@ const pool = new Pool({
 // Handle connection events
 pool.on("connect", () => {
     console.log("Connected to the database");
-    console.log("Database user:", process.env.DB_USER);
+
 });
 
 pool.on("error", (err) => {
