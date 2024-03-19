@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Card, Container, Form} from "react-bootstrap";
 
 function AdminTasksCrate() {
     //        const response = await query('INSERT INTO tasks (task_name, description, due_date, status, project_id, assigned_to_user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [task_name, description, due_date, status, project_id, assigned_to_user_id]);
@@ -24,20 +25,45 @@ console.log(data);
         window.location = '/createProject';
 
     }
+    const handleChanges = (e) => {
+        if (e.target.name === 'task_name') {
+            setTaskName(e.target.value);
+        } else if (e.target.name === 'description') {
+            setDescription(e.target.value);
+        } else if (e.target.name === 'due_date') {
+            setDueDate(e.target.value);
+        } else if (e.target.name === 'status') {
+            setStatus(e.target.value);
+        }
+    }
+
 
 
     return (
         <div>
-            {
-                <h>
-                    project_id: {project_id}
+            <Container style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Card style={{width: '30rem', margin:"10px"}}>
+                    <Card.Body>
+                        <Card.Title>Create Task</Card.Title>
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3" controlId="formBasicTaskName">
+                                <Form.Label>Task Name</Form.Label>
+                                <Form.Control type="text" name="task_name" value={task_name} onChange={handleChanges} placeholder="Enter Task Name" />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicDescription">
+                                <Form.Label>Description</Form.Label>
+                                <Form.Control type="text" name="description" value={description} onChange={handleChanges} placeholder="Description" />
+                            </Form.Group>
+                            <Form.Group className="mb-3" controlId="formBasicDueDate">
+                                <Form.Label>Due Date</Form.Label>
+                                <Form.Control type="date" name="due_date" value={due_date} onChange={handleChanges} placeholder="Due Date" />
+                            </Form.Group>
+                            <button type="submit" className="btn btn-primary">Create Task</button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </Container>
 
-                </h>}
-            {
-                <h1>
-                    assigned_to_user_id: {assigned_to_user_id}
-                </h1>
-            }
         </div>
     );
 }
